@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "username": "staff1",
+    "role": "staff"
+  },
+  {
+    "id": 2,
+    "username": "staff2",
+    "role": "staff"
+  },
+  {
+    "id": 3,
+    "username": "admin_cs",
+    "role": "admin",
+    "college": "计算机学院"
+  },
+  {
+    "id": 4,
+    "username": "admin_ee",
+    "role": "admin",
+    "college": "电子工程学院"
+  },
+  {
+    "id": 5,
+    "username": "admin_me",
+    "role": "admin",
+    "college": "机械工程学院"
+  }
+]
