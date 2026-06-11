@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Users, UserCheck, UserX, Package, BarChart3, LogOut, Building2, Shirt, Footprints, CircleDot, TrendingUp } from 'lucide-react';
 import { api } from '@/utils/api';
 import { useAdminAuthStore } from '@/store/authStore';
-import { StatsData, Student, CLOTHING_TYPE_LABELS } from '@shared/types';
+import { StatsData, Student, CLOTHING_TYPE_LABELS, ClothingType } from '@shared/types';
 
-const typeIcons: Record<string, typeof Shirt> = {
+const typeIcons: Record<ClothingType, typeof Shirt> = {
   top: Shirt,
   pants: CircleDot,
   shoe: Footprints,
@@ -215,15 +215,15 @@ function Dashboard() {
                     </h2>
                   </div>
                   <div className="p-6">
-                    {stats.outOfStock.length === 0 ? (
+                    {stats.pendingItems.length === 0 ? (
                       <div className="text-center py-8 text-gray-400">
                         <Package className="w-12 h-12 mx-auto mb-2 opacity-50" />
                         <p>所有物品已发放完毕</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-4">
-                        {stats.outOfStock.slice(0, 8).map((item, index) => {
-                          const Icon = typeIcons[item.type] || Package;
+                        {stats.pendingItems.slice(0, 8).map((item, index) => {
+                          const Icon = typeIcons[item.type];
                           return (
                             <div
                               key={`${item.type}-${item.size}`}
@@ -236,13 +236,13 @@ function Dashboard() {
                                 </div>
                                 <div>
                                   <div className="text-sm text-gray-500">
-                                    {CLOTHING_TYPE_LABELS[item.type as keyof typeof CLOTHING_TYPE_LABELS]}
+                                    {CLOTHING_TYPE_LABELS[item.type]}
                                   </div>
                                   <div className="font-bold text-gray-900">{item.size} 码</div>
                                 </div>
                               </div>
                               <div className="mt-3 flex items-center justify-between">
-                                <span className="text-xs text-gray-400">待发放</span>
+                                <span className="text-xs text-gray-400">待发放人数</span>
                                 <span className="text-xl font-bold text-accent-600">{item.count}</span>
                               </div>
                             </div>

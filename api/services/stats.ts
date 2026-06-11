@@ -28,8 +28,7 @@ function calculateStats(students: Student[]): StatsData {
     notReceived: data.total - data.received,
   }));
 
-  const sizeDemand = new Map<string, number>();
-  const sizeReceived = new Map<string, number>();
+  const pendingMap = new Map<string, { type: ClothingType; size: string; count: number }>();
 
   const types: ClothingType[] = ['top', 'pants', 'shoe', 'belt'];
   types.forEach(type => {
@@ -56,29 +55,25 @@ function calculateStats(students: Student[]): StatsData {
           break;
       }
 
-      const demandKey = `${type}-${size}`;
-      sizeDemand.set(demandKey, (sizeDemand.get(demandKey) || 0) + 1);
       if (!received) {
-        sizeReceived.set(demandKey, (sizeReceived.get(demandKey) || 0) + 1);
+        const key = `${type}-${size}`;
+        const existing = pendingMap.get(key);
+        if (existing) {
+          existing.count++;
+        } else {
+          pendingMap.set(key, { type, size, count: 1 });
+        }
       }
     });
   });
 
-  const outOfStock: { type: string; size: string; count: number }[] = [];
-  sizeReceived.forEach((count, key) => {
-    if (count > 0) {
-      const [type, size] = key.split('-');
-      outOfStock.push({ type, size, count });
-    }
-  });
-
-  outOfStock.sort((a, b) => b.count - a.count);
+  const pendingItems = Array.from(pendingMap.values()).sort((a, b) => b.count - a.count);
 
   return {
     totalStudents,
     receivedStudents,
     notReceivedStudents,
-    outOfStock,
+    pendingItems,
     byCollege,
   };
 }

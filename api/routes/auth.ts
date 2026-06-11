@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { authenticateAdmin } from '../db/database';
 import { ApiResponse, LoginResponse } from '@shared/types';
+import { createToken } from '../middleware/auth';
 
 const router = Router();
 
@@ -25,7 +26,7 @@ router.post('/staff/login', (req: Request, res: Response) => {
     return res.status(401).json(response);
   }
 
-  const token = Buffer.from(`${username}:${Date.now()}`).toString('base64');
+  const token = createToken(admin);
   
   const response: ApiResponse<LoginResponse> = {
     success: true,
@@ -59,7 +60,7 @@ router.post('/admin/login', (req: Request, res: Response) => {
     return res.status(401).json(response);
   }
 
-  const token = Buffer.from(`${username}:${Date.now()}`).toString('base64');
+  const token = createToken(admin);
   
   const response: ApiResponse<LoginResponse> = {
     success: true,

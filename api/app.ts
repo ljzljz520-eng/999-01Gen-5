@@ -17,6 +17,7 @@ import distributeRoutes from './routes/distribute'
 import exchangeRoutes from './routes/exchange'
 import adminRoutes from './routes/admin'
 import { initDatabase } from './db/database'
+import { requireAuth } from './middleware/auth'
 
 // for esm mode
 const __filename = fileURLToPath(import.meta.url)
@@ -39,9 +40,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }))
  */
 app.use('/api', authRoutes)
 app.use('/api/student', studentRoutes)
-app.use('/api/distribute', distributeRoutes)
-app.use('/api/exchange', exchangeRoutes)
-app.use('/api/admin', adminRoutes)
+app.use('/api/distribute', requireAuth(['staff', 'admin']), distributeRoutes)
+app.use('/api/exchange', requireAuth(['staff', 'admin']), exchangeRoutes)
+app.use('/api/admin', requireAuth(['admin']), adminRoutes)
 
 /**
  * health

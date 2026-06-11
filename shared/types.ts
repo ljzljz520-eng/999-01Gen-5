@@ -34,15 +34,17 @@ export interface AdminUser {
   college?: string;
 }
 
+export interface PendingItem {
+  type: ClothingType;
+  size: string;
+  count: number;
+}
+
 export interface StatsData {
   totalStudents: number;
   receivedStudents: number;
   notReceivedStudents: number;
-  outOfStock: {
-    type: string;
-    size: string;
-    count: number;
-  }[];
+  pendingItems: PendingItem[];
   byCollege: {
     college: string;
     total: number;
